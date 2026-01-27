@@ -1,0 +1,97 @@
+useContext:-
+
+In React, data flows parent → child using props.
+
+That’s fine until this happens:
+
+App
+→ Component A
+→ Component B
+→ Component C
+
+If Component C needs data from App, you end up passing props through A and B even though they don’t need it.
+
+This is called prop drilling.
+It makes code messy and hard to maintain.
+
+👉 useContext exists to avoid prop drilling.
+
+What is useContext (in simple words):-
+
+useContext is a React hook that lets any component directly access shared data, without passing props step by step.
+
+
+
+
+
+
+
+
+1️⃣ Create a Context
+import { createContext } from "react";
+
+const UserContext = createContext();
+export default UserContext;
+This creates a container to store data.
+
+
+2️⃣ Provide the Context (share the data)
+Usually done in App.js or a parent component.
+import UserContext from "./UserContext";
+import Profile from "./Profile";
+function App() {
+  const user = "Anisha";
+  return (
+    <UserContext.Provider value={user}>
+      <Profile />
+    </UserContext.Provider>
+  );
+}
+export default App;
+📌 value={user} is the data you want to share.
+
+
+
+3️⃣ Consume the Context using useContext
+Now any child component can directly access it.
+import { useContext } from "react";
+import UserContext from "./UserContext";
+
+function Profile() {
+  const user = useContext(UserContext);
+
+  return <h1>Hello, {user}</h1>;
+}
+export default Profile;
+
+
+✅ No props
+✅ Clean code
+✅ Easy to manage
+
+
+How useContext works internally (easy view)
+React checks the nearest Provider
+Takes the value
+Gives it to the component calling useContext
+When should you use useContext?
+
+
+Use it when:
+Same data is needed in many components
+Data is global or semi-global
+Examples:
+
+User login info
+Theme (dark/light mode)
+Language
+Cart data in e-commerce
+Authentication status
+When NOT to use useContext
+
+
+Avoid it when:
+Data is used by only 1–2 components
+Data changes very frequently (can cause re-renders)
+In those cases, normal props or state is better.
+
